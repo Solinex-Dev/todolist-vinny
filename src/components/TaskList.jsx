@@ -1,38 +1,61 @@
-const TaskList = ({ tasks, activeFilter, toggleTask, deleteTask }) => {
-  const filteredTasks = tasks.filter((task) => {
-    if (activeFilter === "Completed") return task.completed;
-    if (activeFilter === "Pending") return !task.compelted;
-    return true;
-  });
-
+const TaskList = ({
+  tasks,
+  editTask,
+  toggleTask,
+  deleteTask,
+  editingTaskId,
+  editedText,
+  setEditedText,
+  saveEdit,
+}) => {
   return (
-    <div className="flex flex-col gap-4 justify-start items-start w-full mt-10 bg-white text-black p-10 rounded shadow">
-      {filteredTasks.length === 0 ? (
+    <div className="flex flex-col gap-4 justify-start items-start w-full mt-10 bg-gray-800 text-black p-10 rounded-lg shadow">
+      {tasks.length === 0 ? (
         <p className="text-center w-full text-gray-500 italic">
-          No tasks in this filter.
+          No tasks yet. Add one above.
         </p>
       ) : (
-        filteredTasks.map((task) => (
+        tasks.map((task) => (
           <div
             key={task.id}
-            className={`flex justify-between items-center p-3 rounded w-full border ${
-              task.completed ? "bg-green-100" : "bg-gray-100"
-            }`}
+            className="flex justify-between items-center p-3 rounded w-full border bg-gray-100"
           >
-            <div
-              onClick={() => toggleTask(task.id)}
-              className={`cursor-pointer select-none ${
-                task.completed ? "line-through text-gray-500" : ""
-              }`}
-            >
-              {task.text}
+            <div className="w-full mr-5">
+              {editingTaskId === task.id ? (
+                <input
+                  className="w-full p-2 border border-gray-400 rounded"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  onBlur={() => saveEdit(task.id)}
+                  onKeyDown={(e) => e.key === "Enter" && saveEdit(task.id)}
+                  autoFocus
+                />
+              ) : (
+                <div
+                  onClick={() => editTask(task.id, task.text)}
+                  className={`cursor-pointer select-none ${
+                    task.completed ? "line-through text-gray-500" : ""
+                  }`}
+                >
+                  {task.text}
+                </div>
+              )}
             </div>
-            <button
-              onClick={() => deleteTask(task.id)}
-              className="text-red-500 hover:underline text-sm"
-            >
-              Delete
-            </button>
+
+            <div className="flex flex-row gap-3">
+              <button
+                onClick={() => toggleTask(task.id)}
+                className="hover:bg-green-200 text-sm bg-green-500 p-1 rounded text-white w-14 text-center"
+              >
+                Done
+              </button>
+              <button
+                onClick={() => deleteTask(task.id)}
+                className="hover:bg-red-200 text-sm bg-red-500 p-1 rounded text-white w-14 text-center"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))
       )}
