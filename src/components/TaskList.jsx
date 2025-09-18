@@ -9,7 +9,7 @@ const TaskList = ({
   saveEdit,
 }) => {
   return (
-    <div className="flex flex-col gap-4 justify-start items-start w-full mt-10 bg-gray-800 text-black p-10 rounded-lg shadow">
+    <div className="flex flex-col gap-4 justify-start items-start w-[700px] mt-10 bg-gray-800 text-black p-10 rounded-lg shadow min-h-[700px] overflow-scroll max-h-[700px] task-list-scroll">
       {tasks.length === 0 ? (
         <p className="text-center w-full text-gray-500 italic">
           No tasks yet. Add one above.

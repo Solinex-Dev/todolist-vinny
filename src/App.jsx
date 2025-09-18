@@ -1,13 +1,24 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskList from "./components/TaskList";
 
 function App() {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+  const saved = localStorage.getItem("tasks");
+  return saved ? JSON.parse(saved) : [];
+});
+
   const [newTask, setNewTask] = useState("");
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editedText, setEditedText] = useState("");
+
+  
+
+
+  useEffect(() => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}, [tasks]);
 
   const getButtonClasses = (filter) => {
     return `px-6 py-2 text-sm rounded shadow ${
@@ -16,6 +27,8 @@ function App() {
         : "bg-slate-100 text-slate-500 hover:bg-slate-200"
     }`;
   };
+
+  
 
   const handleAddTask = () => {
     if (!newTask.trim()) return;
@@ -64,19 +77,20 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-row gap-5">
-        <div className="flex items-center mt-10 flex-col bg-gray-800 p-16 rounded-lg shadow-lg w-[700px] m-auto text-white gap-5">
+      <div className="flex flex-row gap-5 justify-center items-center max-xl:flex-col">
+        <div className="flex items-center mt-10 flex-col bg-gray-800 p-16 rounded-lg shadow-lg w-[700px] m-auto text-white gap-5 min-h-[700px]">
           <h1 className="font-sans font-semibold text-4xl">vinny-todolist</h1>
           <div className="flex flex-row gap-5 mt-5 mb-5 w-full">
             <input
-              className="rounded-sm p-3 w-full"
+              className="rounded-sm p-3 w-full focus:text-black"
               type="text"
               placeholder="Add new task"
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
             />
             <button
-              className="btn btn-white bg-white text-black w-24 h-12 rounded-sm hover:bg-gray-300"
+              className="btn btn-white bg-white text-black w-36 h-12 rounded-sm hover:bg-gray-300"
               onClick={handleAddTask}
             >
               Add Task
