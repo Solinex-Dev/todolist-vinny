@@ -45,9 +45,13 @@ const TaskList = ({
             <div className="flex flex-row gap-3">
               <button
                 onClick={() => toggleTask(task.id)}
-                className="hover:bg-green-200 text-sm bg-green-500 p-1 rounded text-white w-14 text-center"
+                className={`text-sm p-1 rounded w-14 text-center ${
+                  task.completed
+                    ? "bg-yellow-400 hover:bg-yellow-300 text-black"
+                    : "bg-green-500 hover:bg-green-400 text-white"
+                }`}
               >
-                Done
+                {task.completed ? "Undo" : "Done"}
               </button>
               <button
                 onClick={() => deleteTask(task.id)}
